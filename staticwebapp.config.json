@@ -1,0 +1,15 @@
+{
+  "mimeTypes": {
+    ".vcf": "text/vcard"
+  },
+  "routes": [
+    {
+      "route": "/contact.vcf",
+      "headers": {
+        "Content-Type": "text/vcard; charset=utf-8",
+        "Content-Disposition": "attachment; filename=\"contact.vcf\"",
+        "Cache-Control": "no-cache"
+      }
+    }
+  ]
+}

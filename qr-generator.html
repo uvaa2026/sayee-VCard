@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Card QR Generator</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  body { font-family: system-ui, sans-serif; max-width: 520px; margin: 40px auto; padding: 0 16px; color: #14202e; }
+  input { width: 100%; padding: 12px; font-size: 15px; border: 1px solid #cdd5de; border-radius: 10px; }
+  label { font-weight: 600; display: block; margin: 16px 0 6px; }
+  .row { display: flex; gap: 10px; margin-top: 16px; }
+  button { padding: 12px 18px; border: 0; border-radius: 10px; background: #0f3d6e; color: #fff; font-size: 15px; cursor: pointer; }
+  #qr { margin-top: 24px; padding: 20px; background: #fff; display: inline-block; border: 1px solid #e3e8ee; border-radius: 12px; }
+  p.hint { color: #5b6b7c; font-size: 14px; }
+</style>
+</head>
+<body>
+  <h2>Generate your card QR code</h2>
+  <p class="hint">Open this file locally in a browser after deploying. Paste your live card URL, then download the PNG for printing.</p>
+  <label for="url">Card URL</label>
+  <input id="url" placeholder="https://your-card.azurestaticapps.net">
+  <label for="color">QR colour</label>
+  <input id="color" type="color" value="#0f3d6e" style="height:44px;padding:4px">
+  <div class="row">
+    <button id="gen">Generate</button>
+    <button id="dl">Download PNG</button>
+  </div>
+  <div id="qr"></div>
+<script>
+  const qrBox = document.getElementById('qr');
+  function gen() {
+    const url = document.getElementById('url').value.trim();
+    if (!url) return alert('Enter your card URL');
+    qrBox.innerHTML = '';
+    new QRCode(qrBox, { text: url, width: 1024, height: 1024,
+      colorDark: document.getElementById('color').value, colorLight: '#ffffff',
+      correctLevel: QRCode.CorrectLevel.H });
+    const c = qrBox.querySelector('canvas');
+    if (c) { c.style.width = '260px'; c.style.height = '260px'; }
+    const img = qrBox.querySelector('img');
+    if (img) { img.style.width = '260px'; }
+  }
+  document.getElementById('gen').onclick = gen;
+  document.getElementById('dl').onclick = () => {
+    const c = qrBox.querySelector('canvas');
+    if (!c) return alert('Generate first');
+    const a = document.createElement('a');
+    a.download = 'card-qr.png'; a.href = c.toDataURL('image/png'); a.click();
+  };
+</script>
+</body>
+</html>
